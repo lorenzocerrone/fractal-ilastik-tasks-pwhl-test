@@ -1,6 +1,7 @@
 """
 Collection of Fractal task to run Headless ilastik workflows
 """
+
 from importlib.metadata import PackageNotFoundError, version
 
 try:

@@ -182,9 +182,7 @@ def ilastik_pixel_classification_segmentation(
     logger.info(f"NGFF image has {num_levels=}")
     logger.info(f"NGFF image has {coarsening_xy=}")
     logger.info(f"NGFF image has full-res pixel sizes {full_res_pxl_sizes_zyx}")
-    logger.info(
-        f"NGFF image has level-{level} pixel sizes " f"{actual_res_pxl_sizes_zyx}"
-    )
+    logger.info(f"NGFF image has level-{level} pixel sizes {actual_res_pxl_sizes_zyx}")
 
     # Setup Ilastik headless shell
     shell = seutp_ilastik(ilastik_model)
@@ -318,9 +316,7 @@ def ilastik_pixel_classification_segmentation(
         dimension_separator="/",
     )
 
-    logger.info(
-        f"mask will have shape {data_zyx.shape} " f"and chunks {data_zyx.chunks}"
-    )
+    logger.info(f"mask will have shape {data_zyx.shape} and chunks {data_zyx.chunks}")
 
     # Initialize other things
     logger.info(f"{data_zyx.shape}")
@@ -344,7 +340,7 @@ def ilastik_pixel_classification_segmentation(
             slice(s_y, e_y),
             slice(s_x, e_x),
         )
-        logger.info(f"Now processing ROI {i_ROI+1}/{num_ROIs}")
+        logger.info(f"Now processing ROI {i_ROI + 1}/{num_ROIs}")
 
         # Prepare single-channel or dual-channel input for cellpose
         img_np = load_region(data_zyx, region, compute=True, return_as_3D=True)
@@ -388,8 +384,7 @@ def ilastik_pixel_classification_segmentation(
             overlap_list = get_overlapping_pairs_3D(bbox_df, full_res_pxl_sizes_zyx)
             if len(overlap_list) > 0:
                 logger.warning(
-                    f"ROI {indices} has "
-                    f"{len(overlap_list)} bounding-box pairs overlap"
+                    f"ROI {indices} has {len(overlap_list)} bounding-box pairs overlap"
                 )
 
         # Compute and store 0-th level to disk
@@ -400,7 +395,7 @@ def ilastik_pixel_classification_segmentation(
         )
 
     logger.info(
-        f"End cellpose_segmentation task for {zarr_url}, " "now building pyramids."
+        f"End cellpose_segmentation task for {zarr_url}, now building pyramids."
     )
 
     # Starting from on-disk highest-resolution data, build and write to disk a
