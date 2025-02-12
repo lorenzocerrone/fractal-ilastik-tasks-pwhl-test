@@ -37,7 +37,7 @@ bash 1_2_3_create_pixi_env.sh
 Variables in the script:
 
 * `PACKAGE_ENV_DIR`: The directory where the environment will be created
-* `PWHL_PATH`: The path to the .pwhl.zip file
+* `PWHL_PATH`: The path to the .pwhl.zip file (***This you might need to update in the bash***)
 * `ENV_EXTRA`: The extra to install in the environment (if any like dev, test, task-core). If none are required, set it to `default`.
 
 ## Run the a test to check if the python env is created correctly
