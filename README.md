@@ -1,39 +1,67 @@
-# ilastik-tasks
+# Test task for Pixi-based fractal task collection
 
-Collection of Fractal task to run Headless ilastik workflows.
+Scope of this test is to prototype a pixi-based task collection for fractal tasks.
+The goal is to create reproducible environments that require a mix of pypi, conda and wheel packages.
 
-## Tasks
+## Requirements to run the test
 
-1. **Pixel Classification Segmentation**: A task to run a pixel classification workflow in headless mode. The task requires a trained ilastik project file and a list of input images.
-    The task will run the pixel classification workflow on the input images, and label the connected components in the output image.
+* pixi
 
-## Installation and Deployment
+## Build a .pwhl.zip file
 
-* Install the `mamba` package manager
+A `.pwhl.zip` file is a zip file that contains the modified pyproject.toml file (maybe the lock) and the wheel file for the task package.
+The `pytproject.toml` in a pixi project typically has the source code specified in the `[tool.pixi.pypi-dependencies]` section.
 
-* Download the installation script from this repository
-
-```bash
-curl -O https://raw.githubusercontent.com/fractal-analytics-platform/fractal-ilastik-tasks/main/create_env_script.sh
+```toml
+[tool.pixi.pypi-dependencies]
+ilastik-tasks = { path = ".", editable = true }
 ```
 
-* The scrip might require some small modifications.
+and the modified `pyproject.toml` file will have the wheel file in the `[tool.pixi.pypi-dependencies]` section.
 
-```bash
-VERSION="v0.1.1" # Version of the package to install (by default the latest version)
-COMMMAND="mamba" # Command to use to create the environment (mamba or conda) 
-# Location of the environment
-# If ENVPREFIX is not NULL, the environment will be created with the prefix $ENVPREFIX/$ENVNAME 
-# If ENVPREFIX is NULL, the environment will be created in the default location
-ENVPREFIX="NULL" 
+```toml
+[tool.pixi.pypi-dependencies]
+ilastik-tasks = { path = "ilastik-tasks-0.1.0-py3-none-any.whl" }
 ```
 
-* Install the package using the installation script
-  
 ```bash
-bash create_env_script.sh
+pixi run -e dev python build_pwhl.py
 ```
 
-The installation script will create a conda environment with the name `fractal-ilastik-tasks` and install the package in the environment. It will also download the correct `__FRACTAL_MANIFEST__.json` file.
+## Create a pixi environment
 
-* In the fractal web interface add the task to the workflow as a "local env" task.
+```bash
+bash 1_2_3_create_pixi_env.sh
+```
+
+Variables in the script:
+
+* `PACKAGE_ENV_DIR`: The directory where the environment will be created
+* `PWHL_PATH`: The path to the .pwhl.zip file
+* `ENV_EXTRA`: The extra to install in the environment (if any like dev, test, task-core). If none are required, set it to `default`.
+
+## Run the a test to check if the python env is created correctly
+
+```bash
+bash run_pixi_env_python.sh
+```
+
+Running any python script in the environment:
+
+```bash
+pixi run --manifest-path ./pwhl_env/pyproject.toml -e dev python script.py
+```
+
+## Reinstall the environment
+
+* Remove the environment
+
+```bash
+rm -rf pwhl_env/.pixi  
+```
+
+* Reinstall the environment from frozen pixi.lock
+
+```bash
+bash 6_reinstall_pixi_env.sh
+```

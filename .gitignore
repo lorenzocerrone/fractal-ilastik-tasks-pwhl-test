@@ -113,3 +113,6 @@ ENV/
 # pixi environments
 .pixi
 *.egg-info
+
+# pwhl environments
+pwhl_env/
